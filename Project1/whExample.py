@@ -2,8 +2,7 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-
-
+from scipy.stats import norm
 
 def plotData2D(X, filename=None):
     # create a figure and its axes
@@ -50,7 +49,22 @@ if __name__ == "__main__":
     # read height, weight and gender information into 1D arrays
     ws = np.array([d[0] for d in data])
     hs = np.array([d[1] for d in data])
-    gs = np.array([d[2] for d in data]) 
+    gs = np.array([d[2] for d in data])
+
+    mean, std_dev = sp.stats.norm.fit(ws[ws>0])
+    ws[ws==-1] = mean
+    mean, std_dev = sp.stats.norm.fit(ws[ws>0])
+    print(mean, std_dev)
+    data = np.linspace(int(mean-std_dev*3), int(mean+std_dev*3))
+    pdf = sp.stats.norm.pdf(data, mean, std_dev)
+    plt.plot(data, pdf, 'k', label='fitted normal', linewidth=2, color='orange')
+    plt.plot(ws, np.zeros(ws.shape), 'ro', label='weights', color='blue')
+    plt.title("Fit Normal Distribution to 1-D data")
+    plt.legend()
+    plt.show()
+    # normal_dist_pts = np.sort(np.random.normal(mean, std_dev, size=ws.size))
+    # print(normal_dist_pts)
+    # norm
 
 
     ##########################################################################
