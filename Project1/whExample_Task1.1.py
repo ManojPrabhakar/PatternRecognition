@@ -65,13 +65,8 @@ if __name__ == "__main__":
     # read gender data into 1D array (i.e. into a vector)
     y = data[:,2]
     
-    print('Before Size -', len(X))
-    print(X[:,0:2])
-
+    # Removing the outliers
     X = X[X[:,0] > 0, :]
-
-    print('After Size -', len(X))
-    print(X[:,0:2])
 
     # let's transpose the data matrix 
     X = X.T
