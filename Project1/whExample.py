@@ -57,6 +57,7 @@ if __name__ == "__main__":
     hs = np.array([d[1] for d in data])
     gs = np.array([d[2] for d in data])
 
+    # task 1.2 (fitting normal to 1D data)
     mean, std_dev = sp.stats.norm.fit(ws)
     print('Before replacing outliers, Mean: {}, Standard Deviation:{}'.format(mean, std_dev))
     fit_norm(mean, std_dev)
@@ -86,7 +87,7 @@ if __name__ == "__main__":
     X = X.T
 
     # now, plot weight vs. height using the function defined above
-    plotData2D(X, 'plotWH.pdf')
+    plotData2D(X, '1.1/plotWH.pdf')
 
     # next, let's plot height vs. weight 
     # first, copy information rows of X into 1D arrays
@@ -97,4 +98,4 @@ if __name__ == "__main__":
     Z = np.vstack((h,w))
 
     # third, plot this new representation of the data
-    plotData2D(Z, 'plotHW.pdf')
+    plotData2D(Z, '1.1/plotHW.pdf')
