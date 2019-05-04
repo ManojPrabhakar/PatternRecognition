@@ -1,4 +1,3 @@
-
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -34,7 +33,14 @@ def plotData2D(X, filename=None):
                     bbox_inches='tight', pad_inches=0.1)
     plt.close()
     
-
+def fit_norm(mean, std_dev):
+    data = np.linspace(int(mean-std_dev*3), int(mean+std_dev*3))
+    pdf = sp.stats.norm.pdf(data, mean, std_dev)
+    plt.plot(data, pdf, 'k', label='fitted normal', linewidth=2, color='orange')
+    plt.plot(ws, np.zeros(ws.shape), 'ro', label='weights', color='blue')
+    plt.title("Fit Normal Distribution to 1-D data")
+    plt.legend()
+    plt.show()
 
 
 
@@ -51,20 +57,14 @@ if __name__ == "__main__":
     hs = np.array([d[1] for d in data])
     gs = np.array([d[2] for d in data])
 
-    mean, std_dev = sp.stats.norm.fit(ws[ws>0])
+    mean, std_dev = sp.stats.norm.fit(ws)
+    print('Before replacing outliers, Mean: {}, Standard Deviation:{}'.format(mean, std_dev))
+    fit_norm(mean, std_dev)
+    mean = np.mean(ws[ws>0])
     ws[ws==-1] = mean
-    mean, std_dev = sp.stats.norm.fit(ws[ws>0])
-    print(mean, std_dev)
-    data = np.linspace(int(mean-std_dev*3), int(mean+std_dev*3))
-    pdf = sp.stats.norm.pdf(data, mean, std_dev)
-    plt.plot(data, pdf, 'k', label='fitted normal', linewidth=2, color='orange')
-    plt.plot(ws, np.zeros(ws.shape), 'ro', label='weights', color='blue')
-    plt.title("Fit Normal Distribution to 1-D data")
-    plt.legend()
-    plt.show()
-    # normal_dist_pts = np.sort(np.random.normal(mean, std_dev, size=ws.size))
-    # print(normal_dist_pts)
-    # norm
+    mean, std_dev = sp.stats.norm.fit(ws)
+    print('After replacing outliers, Mean: {}, Standard Deviation:{}'.format(mean, std_dev))
+    fit_norm(mean, std_dev)
 
 
     ##########################################################################
@@ -78,6 +78,9 @@ if __name__ == "__main__":
 
     # read gender data into 1D array (i.e. into a vector)
     y = data[:,2]
+
+    # Task 1.1 -- Removing the outliers
+    X = X[X[:,0] > 0, :]
     
     # let's transpose the data matrix 
     X = X.T
