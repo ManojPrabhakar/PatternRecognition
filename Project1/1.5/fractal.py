@@ -1,11 +1,23 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Task 1.5: Estimating the dimension of fractal objects in an image
+
+# In[3]:
+
+
 import numpy as np
-import scipy as sp
-import matplotlib.pyplot as plt
-from scipy.stats import norm
 import scipy.misc as msc
 import scipy.ndimage as img
 import imageio
+import matplotlib.pyplot as plt
 import math
+
+
+# ## Functions
+
+# In[4]:
+
 
 # Converts to binary image
 # Variables:-
@@ -13,14 +25,17 @@ import math
 # Returns:-
 #   binary image
 def foreground2BinImg(f):
-    d = img.filters.gaussian_filter(f, sigma=0.50, mode='reflect') - \
-    img.filters.gaussian_filter(f, sigma=1.00, mode='reflect')
+    d = img.filters.gaussian_filter(f, sigma=0.50, mode='reflect') -     img.filters.gaussian_filter(f, sigma=1.00, mode='reflect')
     d = np.abs(d)
     m = d.max()
     d[d< 0.1*m] = 0
     d[d>=0.1*m] = 1
     
     return img.morphology.binary_closing(d)
+
+
+# In[12]:
+
 
 # To display the square bins created
 # Variables:-
@@ -33,8 +48,12 @@ def plot_squares(squares, sq_dim, sq_num):
     rows = sq_num
     for i, square in enumerate(squares):
         fig.add_subplot(rows, columns, (i+1))
-        plt.imshow(square.T)
+        plt.imshow(square.T, cmap="gray")
     plt.show()
+
+
+# In[6]:
+
 
 # To divide an image into square bins
 # Variables:-
@@ -46,7 +65,7 @@ def plot_squares(squares, sq_dim, sq_num):
 #   list of square bins
 def make_squares(img, s, dim, make_plot=False):
     squares = []
-    verticals = np.hsplit(g, 1/s)
+    verticals = np.hsplit(img, 1/s)
     for v in verticals:
         squares.append(np.vsplit(v,1/s))
 
@@ -57,6 +76,9 @@ def make_squares(img, s, dim, make_plot=False):
         plot_squares(squares, dim * s, 1/s)
     
     return squares
+
+
+# In[7]:
 
 
 # To count squares with foreground pixels
@@ -71,6 +93,10 @@ def count_fg_squares(squares):
             n+=1
 
     return n
+
+
+# In[8]:
+
 
 # To fit line to data.
 # Variables:-
@@ -94,6 +120,10 @@ def fit_line(xs, ys):
     plt.ylabel('log(n)')
     
     return D, b
+
+
+# In[9]:
+
 
 # Main function that utilises all functions above to display 
 # the count of square bins for each index i = [1,2,...,L-2] where L = log of dimension of image base 2,
@@ -126,44 +156,83 @@ def estimate_fractal_dimension(img):
     print("y-intercept b = ", b)
     
     return log_inv_s, log_n, D, b
-    
 
-if __name__ == "__main__":
-    # Reading image: lightning-3
-    imgName = '1.5/lightning-3'
-    f = msc.imread(imgName+'.png', flatten=True).astype(np.float)
-    plt.imshow(f)
-    # Displaying Binary Image
-    g = foreground2BinImg(f)
-    plt.imshow(g)
-    # Displaying square bins
-    dim = g.shape[0]
-    i=3
-    s = 1/2**i
-    squares = make_squares(g,s,dim,make_plot=True)
-    print(count_fg_squares(squares),"/", len(squares))
-    # Estimating Fractal Dimensions for "lightning-3"
-    l3_log_inv_s, l3_log_n, l3_D, l3_b = estimate_fractal_dimension(g)
-    # Estimating Fractal Dimensions for "tree-2"
-    imgName = '1.5/tree-2'
-    f = msc.imread(imgName+'.png', flatten=True).astype(np.float)
-    g = foreground2BinImg(f)
 
-    plt.imshow(f)
-    plt.show()
-    plt.imshow(g)
-    plt.show()
-    t2_log_inv_s, t2_log_n, t2_D, t2_b = estimate_fractal_dimension(g)
+# ## Demonstration of functions
 
-    # Comparison
-    plt.scatter(l3_log_inv_s, l3_log_n, color="black")
-    plt.scatter(t2_log_inv_s, t2_log_n, color="black")
-    plt.plot(l3_log_inv_s, (l3_D * np.array(l3_log_inv_s) + l3_b), t2_log_inv_s, (t2_D * np.array(t2_log_inv_s) + t2_b))
-    plt.xlabel('log(1/s)')
-    plt.ylabel('log(n)')
-    plt.gca().legend(('Lightening','Tree'))
+# ### Reading image: lightning-3
 
-    # Fractal Dimensions obtained:
-    # Lightning-3.png: 1.5776850270780338
-    # Tree-2: 1.8463900565472438
-    # Tree-2 has higher fractal dimension
+# In[10]:
+
+
+imgName = 'lightning-3'
+f = msc.imread(imgName+'.png', flatten=True).astype(np.float)
+plt.imshow(f)
+
+
+# ### Displaying Binary Image
+
+# In[11]:
+
+
+g = foreground2BinImg(f)
+plt.imshow(g, cmap="gray")
+
+
+# ### Displaying square bins
+
+# In[13]:
+
+
+dim = g.shape[0]
+i=3
+s = 1/2**i
+squares = make_squares(g,s,dim,make_plot=True)
+print(count_fg_squares(squares),"/", len(squares))
+
+
+# ### Estimating Fractal Dimensions for "lightning-3"
+
+# In[14]:
+
+
+l3_log_inv_s, l3_log_n, l3_D, l3_b = estimate_fractal_dimension(g)
+
+
+# ### Estimating Fractal Dimensions for "tree-2"
+
+# In[32]:
+
+
+imgName = 'tree-2'
+f = msc.imread(imgName+'.png', flatten=True).astype(np.float)
+g = foreground2BinImg(f)
+
+plt.imshow(f)
+plt.show()
+plt.imshow(g, cmap="gray")
+plt.show()
+t2_log_inv_s, t2_log_n, t2_D, t2_b = estimate_fractal_dimension(g)
+
+
+# ### Comparison
+
+# In[14]:
+
+
+plt.scatter(l3_log_inv_s, l3_log_n, color="black")
+plt.scatter(t2_log_inv_s, t2_log_n, color="black")
+plt.plot(l3_log_inv_s, (l3_D * np.array(l3_log_inv_s) + l3_b), t2_log_inv_s, (t2_D * np.array(t2_log_inv_s) + t2_b))
+plt.xlabel('log(1/s)')
+plt.ylabel('log(n)')
+plt.gca().legend(('Lightening','Tree'))
+
+
+# ## Answers
+
+# <p>Fractal Dimensions obtained:</p>
+# <ul>
+#     <li>Lightning-3.png: 1.5776850270780338</li>
+#     <li>Tree-2: 1.8463900565472438</li>
+# </ul>
+# <p>Tree-2 has higher fractal dimension</p>
