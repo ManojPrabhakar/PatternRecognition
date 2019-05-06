@@ -37,7 +37,7 @@ def fit_norm(mean, std_dev):
     data = np.linspace(int(mean-std_dev*3), int(mean+std_dev*3))
     pdf = sp.stats.norm.pdf(data, mean, std_dev)
     plt.plot(data, pdf, 'k', label='fitted normal', linewidth=2, color='orange')
-    plt.plot(ws, np.zeros(ws.shape), 'ro', label='weights', color='blue')
+    plt.plot(hs, np.zeros(hs.shape), 'ro', label='heights', color='blue')
     plt.title("Fit Normal Distribution to 1-D data")
     plt.legend()
     plt.show()
@@ -58,12 +58,12 @@ if __name__ == "__main__":
     gs = np.array([d[2] for d in data])
 
     # task 1.2 (fitting normal to 1D data)
-    mean, std_dev = sp.stats.norm.fit(ws)
+    mean, std_dev = sp.stats.norm.fit(hs)
     print('Before replacing outliers, Mean: {}, Standard Deviation:{}'.format(mean, std_dev))
     fit_norm(mean, std_dev)
-    mean = np.mean(ws[ws>0])
-    ws[ws==-1] = mean
-    mean, std_dev = sp.stats.norm.fit(ws)
+    mean = np.mean(hs[hs>0])
+    hs[hs<0] = mean
+    mean, std_dev = sp.stats.norm.fit(hs)
     print('After replacing outliers, Mean: {}, Standard Deviation:{}'.format(mean, std_dev))
     fit_norm(mean, std_dev)
 
