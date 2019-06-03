@@ -43,7 +43,7 @@ def extract_features(x):
     return features
 
 
-if __name__ == "__main__":
+def rule110():
     x = np.array([
         [1, 1, 1],
         [1, 1, -1],
@@ -54,10 +54,28 @@ if __name__ == "__main__":
         [-1, -1, 1],
         [-1, -1, -1]
     ])
-
-    x_t = x.T
-
     y = np.array([-1, 1, 1, 1, -1, 1, 1, -1])
+
+    return x, y
+
+
+def rule126():
+    x = np.array([
+        [1, 1, 1],
+        [1, 1, -1],
+        [1, -1, 1],
+        [1, -1, -1],
+        [-1, 1, 1],
+        [-1, 1, -1],
+        [-1, -1, 1],
+        [-1, -1, -1]
+    ])
+    y = np.array([-1, 1, 1, 1, 1, 1, 1, -1])
+
+    return x, y
+
+if __name__ == "__main__":
+    x, y = rule110()
 
     padded_x, w = linear_regression(x, y)
     y_hat = np.dot(padded_x, w)

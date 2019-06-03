@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     data = read_dat_file()
 
-    kd_tree = custom_KDTree(max_depth=3)
+    kd_tree = custom_KDTree(max_depth=4)
 
     kd_tree.create_tree(data, splitting_dim_mode=0, split_point_mode=0)
     kd_tree.draw('mode_0_0.png')
