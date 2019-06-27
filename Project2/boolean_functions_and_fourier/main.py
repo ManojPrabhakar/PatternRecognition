@@ -75,7 +75,7 @@ def rule126():
     return x, y
 
 if __name__ == "__main__":
-    x, y = rule110()
+    x, y = rule126()
 
     padded_x, w = linear_regression(x, y)
     y_hat = np.dot(padded_x, w)
