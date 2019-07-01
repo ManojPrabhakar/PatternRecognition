@@ -22,7 +22,6 @@ def plot_data(x, y, neuron, figname):
     ax.yaxis.set_ticks_position('left')
     cmap = plt.get_cmap('RdYlBu')
 
-    print(cmap(0), cmap(0.5), cmap(1))
     # generate 2 2d grids for the x & y bounds
     ygrid, xgrid = np.mgrid[slice(x[1, :].min() - 0.05, x[1, :].max() + 0.05, 0.01),
                     slice(x[0, :].min() - 0.02, x[0, :].max() + 0.02, 0.01)]
@@ -44,6 +43,7 @@ def plot_data(x, y, neuron, figname):
         elif out >= 0:
             colors[indx][indy] = 1
 
+        # Had to add this values to get a a variety of colors from the cmap
         colors[0][0] = 0.9
         colors[90][90] = 0.8
         colors[200][0] = 0.3

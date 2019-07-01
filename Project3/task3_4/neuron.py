@@ -3,11 +3,7 @@ import numpy as np
 class Neuron():
     def __init__(self, lr_w = .005, lr_theta = .001, dim = 2):
         self.w = np.random.uniform(-1, 1, dim)[..., np.newaxis]
-        self.w = np.array([[-0.519], [0.145]])
-        print("Weight: ", self.w)
         self.theta = np.random.uniform(-1,1, 1)
-        self.theta = np.array([0.49])
-        print("Theta: ", self.theta)
 
         self.lr_w = lr_w
         self.lr_theta = lr_theta
