@@ -15,14 +15,15 @@ class Neuron():
     def train(self, data, epochs = 1):
         losses = []
 
-        for i, (x, label) in enumerate(data):
-            x = x[..., np.newaxis]
-            out = self.activation_function(x)
-            assert out.shape[0] == 1 and out.shape[1] == 1, print(out)
-            out = out[0]
-            loss = self.loss(out, label)
-            losses.append(loss[0])
-            self.update(out, label, x)
+        for epoch in range(epochs):
+            for i, (x, label) in enumerate(data):
+                x = x[..., np.newaxis]
+                out = self.activation_function(x)
+                assert out.shape[0] == 1 and out.shape[1] == 1, print(out)
+                out = out[0]
+                loss = self.loss(out, label)
+                losses.append(loss[0])
+                self.update(out, label, x)
 
         return losses
 

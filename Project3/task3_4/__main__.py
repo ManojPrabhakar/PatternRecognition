@@ -63,7 +63,7 @@ if __name__ == '__main__':
     y = np.genfromtxt(data_path + 'xor-y.csv', delimiter=', ', dtype=np.float)
     plot_data(x, y, neuron, 'before_training.png')
     data = list(zip(x.T, y))
-    loss = neuron.train(data)
+    loss = neuron.train(data, 50)
     predicted = neuron.test(data)
     print(neuron.loss_vectorized(predicted, y))
     plot_data(x, y, neuron, 'after_training.png')
